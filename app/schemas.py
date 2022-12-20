@@ -10,7 +10,7 @@ class User(BaseModel):
 
     first_name: str
     last_name: str
-    balance: float
+    balance: Decimal
 
 
 class CreateUser(BaseModel):
@@ -19,3 +19,7 @@ class CreateUser(BaseModel):
     password: str = Field(max_length=32)
 
     balance: Decimal = Field(decimal_places=2, default=INIT_BALANCE_FOR_NEW_USER)
+
+
+class BalanceResponse(BaseModel):
+    balance: Decimal
