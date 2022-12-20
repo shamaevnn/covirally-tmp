@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.users.routers import users_router
 from app.events import create_start_app_handler, create_stop_app_handler
 
 
@@ -14,6 +15,7 @@ def get_application() -> FastAPI:
         "shutdown",
         create_stop_app_handler(),
     )
+    application.include_router(users_router)
 
     return application
 
