@@ -41,3 +41,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+INIT_BALANCE_FOR_NEW_USER = 100.0

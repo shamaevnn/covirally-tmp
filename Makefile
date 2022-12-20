@@ -6,7 +6,7 @@ services:
 	docker-compose -f docker-compose.services.yml up
 
 makemigrations:
-	PYTHONPATH=. alembic revision --autogenerate
+	PYTHONPATH=. alembic revision -m "${m}" --autogenerate
 
 migrate:
 	PYTHONPATH=. alembic upgrade head
