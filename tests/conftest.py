@@ -1,23 +1,20 @@
 import asyncio
 import os
 import uuid
-import pytest
 from argparse import Namespace
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Union, AsyncGenerator
+from typing import AsyncGenerator, Union
+
+import pytest
 from alembic.config import Config
-
-
 from fastapi import FastAPI
 from sqlalchemy_utils import create_database, drop_database
 from yarl import URL
 
-
-from app.db.events import connect_to_db, close_db_connection
+from app.db.events import close_db_connection, connect_to_db
 from app.http_cli.events import close_http_cli
 from main import app as main_app
-
 
 PROJECT_PATH = Path(__file__).parent.parent.resolve()
 

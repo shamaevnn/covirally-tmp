@@ -1,5 +1,5 @@
-from typing import Dict, Union, Any
 from enum import Enum
+from typing import Any, Dict, Union
 
 from pydantic import BaseSettings, PostgresDsn
 
