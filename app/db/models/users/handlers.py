@@ -7,7 +7,7 @@ from app.api.errors import DatabaseCreateUser
 from app.db.base import database
 from app.db.models.users.schemas import User as UserTable
 from app.schemas import User, CreateUser
-
+from app.utils import get_password_hash
 
 logger = logging.getLogger()
 
@@ -31,6 +31,7 @@ async def get_user(user_id: int) -> User | None:
 
 async def create_user(create_user_params: CreateUser) -> User:
     create_params = create_user_params.dict()
+    create_params["password"] = get_password_hash(create_user_params.password)
 
     query = insert(UserTable).values(**create_params)
 
