@@ -1,5 +1,13 @@
 # Coverally-tmp
+## Task description
+Service to store and transfer inner coins via FastAPI. Number of functions:
+* 100 bonus coins for new users
+* Transfer coins to other user regarding balance limits
+* Viewing own balance
 
+## API
+These endpoints are available:
+<img src="https://user-images.githubusercontent.com/50623190/208889226-478adf8b-e762-4c02-922c-44ae1aae55d1.png">
 
 ## First run
 1. Create virtual environment and install dependencies
