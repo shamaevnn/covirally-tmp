@@ -1,26 +1,24 @@
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, Path, Depends
 
-from app.api.errors import UserNotFound
-from app.db.models.users.handlers import get_user, create_user
+from app.api.auth.utils import get_current_user
+from app.db.models.users.handlers import create_user
 from app.schemas import User, CreateUser, BalanceResponse
 
 users_router = APIRouter(tags=["Users"], prefix="/users")
 
 
-@users_router.get("/{user_id}", response_model=User)
-async def get_user_by_id(user_id: int = Path()) -> User:
-    user = await get_user(user_id=user_id)
-    if not user:
-        raise UserNotFound(user_id=user_id)
-    return user
+@users_router.get("/me", response_model=User)
+async def get_user_info_for_logged_user(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    return current_user
 
 
-@users_router.get("/{user_id}/balance", response_model=BalanceResponse)
-async def get_user_balance(user_id: int = Path()) -> BalanceResponse:
-    user = await get_user(user_id=user_id)
-    if not user:
-        raise UserNotFound(user_id=user_id)
-    return BalanceResponse(balance=user.balance)
+@users_router.get("/balance", response_model=BalanceResponse)
+async def get_user_balance(
+    current_user: User = Depends(get_current_user),
+) -> BalanceResponse:
+    return BalanceResponse(balance=current_user.balance)
 
 
 @users_router.post("", response_model=User)

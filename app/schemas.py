@@ -29,3 +29,8 @@ class CreateUser(BaseModel):
 
 class BalanceResponse(BaseModel):
     balance: Decimal
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str

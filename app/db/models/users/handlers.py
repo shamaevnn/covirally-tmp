@@ -10,7 +10,7 @@ from app.config import INIT_BALANCE_FOR_NEW_USER
 from app.db.base import database
 from app.db.models.users.schemas import User as UserTable
 from app.schemas import User, CreateUser
-from app.utils import get_password_hash
+from app.api.auth.password_utils import get_password_hash
 
 logger = logging.getLogger()
 

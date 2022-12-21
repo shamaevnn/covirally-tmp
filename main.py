@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.auth.routers import auth_router
 from app.api.users.routers import users_router
 from app.events import create_start_app_handler, create_stop_app_handler
 
@@ -16,6 +17,7 @@ def get_application() -> FastAPI:
         create_stop_app_handler(),
     )
     application.include_router(users_router)
+    application.include_router(auth_router)
 
     return application
 
