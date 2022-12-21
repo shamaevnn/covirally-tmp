@@ -24,7 +24,7 @@ async def get_user_info_for_logged_user(
     return current_user
 
 
-@users_router.get("/balance", response_model=BalanceResponse)
+@users_router.get("/me/balance", response_model=BalanceResponse)
 async def get_user_balance(
     current_user: User = Depends(get_current_user),
 ) -> BalanceResponse:
@@ -34,7 +34,7 @@ async def get_user_balance(
     return BalanceResponse(balance=current_user.balance)
 
 
-@users_router.post("/balance/transfer", response_model=TransferBalanceResponse)
+@users_router.post("/me/balance/transfer", response_model=TransferBalanceResponse)
 async def transfer_user_balance(
     transfer_balance_params: TransferBalanceToUser,
     current_user: User = Depends(get_current_user),
