@@ -18,6 +18,9 @@ users_router = APIRouter(tags=["Users"], prefix="/users")
 async def get_user_info_for_logged_user(
     current_user: User = Depends(get_current_user),
 ) -> User:
+    """
+    Получение всех данных для авторизованного пользователя
+    """
     return current_user
 
 
@@ -25,6 +28,9 @@ async def get_user_info_for_logged_user(
 async def get_user_balance(
     current_user: User = Depends(get_current_user),
 ) -> BalanceResponse:
+    """
+    Получение баланса для авторизованного пользователя
+    """
     return BalanceResponse(balance=current_user.balance)
 
 
@@ -33,6 +39,9 @@ async def transfer_user_balance(
     transfer_balance_params: TransferBalanceToUser,
     current_user: User = Depends(get_current_user),
 ) -> TransferBalanceResponse:
+    """
+    Перевод внутренней валюты от одного пользователя к другому
+    """
     new_sender_balance, err = await transfer(
         sender=current_user, transfer_params=transfer_balance_params
     )
@@ -45,4 +54,7 @@ async def transfer_user_balance(
 
 @users_router.post("", response_model=User)
 async def create_new_user(user_params: CreateUser) -> User:
+    """
+    Создание нового пользователя
+    """
     return await create_user(create_user_params=user_params)

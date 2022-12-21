@@ -85,6 +85,10 @@ async def transfer_amount(
     receiver: User,
     amount: Decimal,
 ) -> tuple[Decimal | None, Exception | None]:
+    """
+    Перевод amount от одного пользователя другому.
+    Выполняется в транзакции.
+    """
     transaction = await database.transaction()
 
     sender_new_balance = sender.balance - amount

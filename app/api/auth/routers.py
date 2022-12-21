@@ -19,6 +19,10 @@ auth_router = APIRouter(tags=["Authentication"], prefix="/auth")
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> TokenResponse:
+    """
+    Авторизовывает пользователя.
+    Возвращает bearer токен для дальнейших запросов.
+    """
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise InvalidCredentials()

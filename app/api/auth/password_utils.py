@@ -3,7 +3,7 @@ import bcrypt
 
 def get_password_hash(password: str) -> str:
     """
-    password: пароль, который пользователь вводит при логине
+    password: пароль, который пользователь вводит при логине.
     return: хэш пароля, который хранится в базе данных
     """
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
