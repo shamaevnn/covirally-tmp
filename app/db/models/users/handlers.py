@@ -3,9 +3,13 @@ from decimal import Decimal
 from typing import cast
 
 from pydantic import ValidationError
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, update
 
-from app.api.errors import DatabaseCreateUser, UserAlreadyExist
+from app.api.errors import (
+    DatabaseCreateUser,
+    UserAlreadyExist,
+    InternalErrorTransferBalance,
+)
 from app.config import INIT_BALANCE_FOR_NEW_USER
 from app.db.base import database
 from app.db.models.users.schemas import User as UserTable
@@ -74,3 +78,40 @@ async def create_user(create_user_params: CreateUser) -> User:
 
     user: User = User.construct(**dict(id=created_id, **create_params))
     return user
+
+
+async def transfer_amount(
+    sender: User,
+    receiver: User,
+    amount: Decimal,
+) -> tuple[Decimal | None, Exception | None]:
+    transaction = await database.transaction()
+
+    sender_new_balance = sender.balance - amount
+    receiver_new_balance = receiver.balance + amount
+    try:
+        update_sender = (
+            update(UserTable)
+            .where(UserTable.username == sender.username)
+            .values(balance=sender_new_balance)
+        )
+        update_receiver = (
+            update(UserTable)
+            .where(UserTable.username == receiver.username)
+            .values(balance=receiver_new_balance)
+        )
+
+        await database.execute(update_sender)
+        await database.execute(update_receiver)
+
+    except Exception as e:
+        await transaction.rollback()
+        return None, InternalErrorTransferBalance(
+            sender_username=sender.username,
+            receiver_username=receiver.username,
+            amount=amount,
+            details=str(e),
+        )
+    else:
+        await transaction.commit()
+        return sender_new_balance, None

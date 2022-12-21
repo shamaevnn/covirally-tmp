@@ -1,8 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
-
-from app.config import INIT_BALANCE_FOR_NEW_USER
+from pydantic import BaseModel, Field, validator, ValidationError
 
 
 class User(BaseModel):
@@ -34,3 +32,25 @@ class BalanceResponse(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+
+
+class TransferBalanceToUser(BaseModel):
+    transfer_amount: Decimal
+    receiver_username: str
+
+    @validator("transfer_amount")
+    def amount_gt_0(cls, amount: Decimal) -> Decimal:
+        assert amount > 0, "Transfer amount must be positive"
+        return amount
+
+    def validate_params(self, sender: User) -> None:
+        if sender.balance < self.transfer_amount:
+            msg = (
+                f"Transfer amount is greater than sender balance,"
+                f" balance={sender.balance} and amount={self.transfer_amount}"
+            )
+            raise ValueError(msg)
+
+
+class TransferBalanceResponse(BaseModel):
+    new_balance: Decimal
