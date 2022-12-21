@@ -12,3 +12,9 @@ class DatabaseCreateUser(HTTPException):
     def __init__(self, create_params: CreateUser) -> None:
         msg = f"Internal database error while creating user with {create_params=}"
         super().__init__(status_code=500, detail=msg)
+
+
+class UserAlreadyExist(HTTPException):
+    def __init__(self, username: str) -> None:
+        msg = f"User with {username=} already exists."
+        super().__init__(status_code=400, detail=msg)

@@ -4,7 +4,7 @@ from app.api.errors import UserNotFound
 from app.db.models.users.handlers import get_user, create_user
 from app.schemas import User, CreateUser, BalanceResponse
 
-users_router = APIRouter(tags=["Users"], prefix="/api/v1/users")
+users_router = APIRouter(tags=["Users"], prefix="/users")
 
 
 @users_router.get("/{user_id}", response_model=User)
